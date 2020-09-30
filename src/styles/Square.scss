@@ -1,0 +1,50 @@
+.Square {
+  // Maintain aspect ratio of 1
+  height: 0;
+  overflow: hidden;
+  padding-top: 100%;
+  position: relative;
+  background-color: $gray-100;
+  border: 2px solid $gray-900;
+}
+.Square__inner {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  padding: 0;
+  border-radius: 0;
+  background-color: transparent;
+  color: $gray-900 !important;
+
+  &:focus {
+    outline: none;
+    background-color: lighten($playerColor, 7%);
+  }
+}
+.Square__move {
+  @include transition();
+  position: absolute;
+  font-size: 48px;
+  font-weight: bold;
+  opacity: 0;
+  transform: scale(0.5) rotate(-90deg);
+
+  &.Square__visible {
+    opacity: 1;
+    transform: scale(1) rotate(0);
+  }
+}
+.Square__o {
+  background-color: $computerColor;
+}
+.Square__x {
+  background-color: $playerColor;
+}

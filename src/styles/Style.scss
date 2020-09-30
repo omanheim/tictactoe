@@ -1,0 +1,12 @@
+@import "~bootstrap/scss/bootstrap";
+
+$computerColor: #f1c3a2;
+$playerColor: #cde8ce;
+
+@import './TicTacToe';
+@import './Square';
+
+body {
+  font-family: 'Libre Franklin', sans-serif;
+  background-color: #f1f1f1;
+}

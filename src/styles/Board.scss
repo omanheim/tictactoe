@@ -1,0 +1,20 @@
+.GameBoard__board {
+  border: 3px solid $gray-900;
+}
+.GameBoard__square {
+  @include transition(transform 0.5s ease-out);
+  transform: rotate(0deg);
+}
+.GameBoard__winningSquare {
+  animation-duration: 1s;
+  animation-name: win;
+  z-index: 1;
+}
+@keyframes win {
+  0% { transform: rotate(0deg) scale(1) }
+  20% { transform: rotate(3deg) scale(0.95) }
+  40% { transform: rotate(-3deg) scale(0.95)}
+  60% { transform: rotate(3deg) scale(0.95) }
+  80% { transform: rotate(-3deg) scale(0.95) }
+  100% { transform: rotate(0) scale(1) }
+}
