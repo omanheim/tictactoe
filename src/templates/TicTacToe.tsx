@@ -25,7 +25,7 @@ interface State {
 function getSubheading(turn: Player | null) {
   switch (turn) {
     case Player.computer:
-      return "Interesting move! Let me think...";
+      return "Thinking...";
     case Player.human:
       return "Your turn!";
     default:
@@ -38,7 +38,7 @@ function getInitialState() {
 }
 
 /** A constant amount of time to simulate the AI "thinking" before its move */
-const kComputerWaitingTimeMs = 500;
+const kComputerWaitingTimeMs = 700;
 
 /** A playable Tic Tac Toe game for a user to play against an AI opponent */
 export default class TicTacToe extends React.PureComponent<Props, State> {
@@ -49,10 +49,9 @@ export default class TicTacToe extends React.PureComponent<Props, State> {
     // Only attempt to make a move if empty squares remain
     if (!areMovesRemaining(board)) return;
 
-    // Artifically simulator a wait time before the AI makes a move
+    // Artificially simulator a wait time before the AI makes a move
     setTimeout(() => {
       const nextMove = getNextMove(board);
-      console.log(nextMove, board);
       const updatedBoard = getUpdatedBoard(
         board,
         nextMove,

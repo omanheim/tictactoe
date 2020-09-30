@@ -25,6 +25,7 @@ export default class GameBoard extends React.PureComponent<Props> {
           <div className="row no-gutters">
             {row.map((square, j) => (
               <div
+                key={`${i}${j}`}
                 className={classNames("GameBoard__square col-4", {
                   GameBoard__winningSquare:
                     winningSquares &&

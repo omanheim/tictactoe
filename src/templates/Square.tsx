@@ -29,6 +29,7 @@ export default class Square extends React.PureComponent<Props> {
         >
           {[Move.x, Move.o].map((move) => (
             <span
+              key={move}
               className={classNames(`Square__move`, {
                 Square__visible: squareState === move,
               })}
