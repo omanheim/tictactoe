@@ -22,7 +22,7 @@ export default class GameBoard extends React.PureComponent<Props> {
     return (
       <div className="GameBoard__board container col-8 offset-2 col-md-6 offset-md-3 col-lg-4 offset-lg-4 px-0">
         {board.map((row, i) => (
-          <div className="row no-gutters">
+          <div key={i.toString()} className="row no-gutters">
             {row.map((square, j) => (
               <div
                 key={`${i}${j}`}

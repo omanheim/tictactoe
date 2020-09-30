@@ -4,7 +4,7 @@ Hello! This is an implementation of the game Tic Tac Toe, to be played by the us
 
 To run the game, clone this repository to your local machine and navigate to the root directory.
 
-Run `yarn install` and then `yarn start`.
+Run `yarn install` and then `yarn start` (or `npm install` and `npm start`).
 
 You should now be able to play Tic Tac Toe in your browser at `http://localhost:3000`.
 
