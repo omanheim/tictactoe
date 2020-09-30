@@ -10,7 +10,7 @@ interface Props {
   onClick: () => unknown;
 }
 
-/** A single square on a tic tac toe game board */
+/** A single square on a Tic Tac Toe game board */
 export default class Square extends React.PureComponent<Props> {
   render() {
     const { squareState, onClick, turn } = this.props;

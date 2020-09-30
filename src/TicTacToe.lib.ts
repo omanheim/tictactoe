@@ -6,7 +6,10 @@ export enum Move {
   o = "o",
 }
 
-/** The possible states for any given square on the board */
+/**
+ * The possible states for any given square on the board; null indicates a
+ * square is open
+ */
 export type SquareState = Move | null;
 
 /**
@@ -22,13 +25,16 @@ export enum Player {
   computer = "computer",
 }
 
-/** The move type associated with each player */
+/** The type of move corresponding to each player */
 export const playerMoves: { [key in Player]: Move } = {
   [Player.human]: Move.x,
   [Player.computer]: Move.o,
 };
 
-/** The path to a board square is an [x,y] tuple */
+/**
+ * Each board square is represented by an [x,y] tuple corresponding to its
+ * coordinates in the board
+ */
 export type Path = number[];
 
 /** Returns an empty game board with 9 squares initialized to null */
@@ -47,6 +53,7 @@ export function getUpdatedBoard(
   pathToMove: Path,
   move: Move
 ) {
+  // Make a copy of the board so we don't overwrite a current board state
   const updatedBoard = [
     [...initialBoard[0]],
     [...initialBoard[1]],
@@ -56,6 +63,7 @@ export function getUpdatedBoard(
   return updatedBoard;
 }
 
+/** Returns true a set of squares are filled by the same player */
 function isWinningLine(board: Board, paths: Path[]) {
   return (
     getBoardSquareState(board, paths[0]) &&
@@ -64,8 +72,8 @@ function isWinningLine(board: Board, paths: Path[]) {
 }
 
 /**
- * Returns the set of squares constituting a win if one exists; otherwise,
- * returns null
+ * Returns the set of squares by which a player has won, if one exists;
+ * if no player has won, returns null
  */
 export function getWinningBoardSquares(board: Board): Path[] | null {
   for (let i = 0; i < 3; ++i) {
@@ -104,13 +112,13 @@ export function getWinningBoardSquares(board: Board): Path[] | null {
 export function getBoardWinner(board: Board): Player | null {
   const winningSquares = getWinningBoardSquares(board);
   if (winningSquares) {
-    return (
-      (Object.keys(playerMoves).find(
-        (p) =>
-          playerMoves[p as Player] ===
-          getBoardSquareState(board, winningSquares[0])
-      ) as Player) || null
-    );
+    // Use any of the winning squares to identify the winner
+    const winningSquare = getBoardSquareState(board, winningSquares[0]);
+    return winningSquare
+      ? playerMoves[Player.computer] === winningSquare
+        ? Player.computer
+        : Player.human
+      : null;
   }
   return null;
 }
@@ -119,7 +127,7 @@ function otherPlayer(player: Player) {
   return player === Player.human ? Player.computer : Player.human;
 }
 
-/** Whether any moves remain, i.e. any squares are currently empty */
+/** Whether any moves remain, i.e. any board squares are currently empty */
 export function areMovesRemaining(board: Board) {
   for (let i = 0; i < 3; ++i) {
     for (let j = 0; j < 3; ++j) {
@@ -131,14 +139,23 @@ export function areMovesRemaining(board: Board) {
   return false;
 }
 
+/**
+ * Use a minimax algorithm to determine the next best move for the AI to make,
+ * based on the given game board. Recursively traverses the tree of possible
+ * board states, optimizing for the most immediate win possible (and minimizing
+ * the chance of the human player making a winning move).
+ */
 function minimax(board: Board, player: Player, depth: number) {
   const winner = getBoardWinner(board);
   if (winner) {
     return {
+      // A computer win gets a positive score while a human win gets a negative
+      // score; use depth to add weight for outcomes that happen sooner
       value: winner === Player.computer ? 10 - depth : -10 + depth,
       move: [-1, -1],
     };
   } else if (!areMovesRemaining(board)) {
+    // If no moves remain, the game ends in a tie
     return { value: 0, move: [-1, -1] };
   }
 
@@ -149,6 +166,9 @@ function minimax(board: Board, player: Player, depth: number) {
   for (let i = 0; i < 3; ++i) {
     for (let j = 0; j < 3; ++j) {
       if (board[i][j] === null) {
+        // For each open square on the board, consider all outcomes for this
+        // player making a move on that square; for the AI, we take the max of
+        // all outcome values, and for the human, we take the minimum
         const val = minimax(
           getUpdatedBoard(board, [i, j], playerMoves[player]),
           otherPlayer(player),

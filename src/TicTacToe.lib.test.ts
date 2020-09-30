@@ -57,7 +57,7 @@ describe(getBoardWinner, () => {
 });
 
 describe(getNextMove, () => {
-  it("picks the next best move", () => {
+  it("blocks a user win", () => {
     const board = [
       [Move.x, Move.o, Move.x],
       [null, Move.o, null],
@@ -66,5 +66,27 @@ describe(getNextMove, () => {
     const bestMove = getNextMove(board);
     expect(bestMove[0]).toBe(1);
     expect(bestMove[1]).toBe(2);
+  });
+
+  it("starts in the center square", () => {
+    const board = [
+      [Move.x, null, null],
+      [null, null, null],
+      [null, null, null],
+    ];
+    const bestMove = getNextMove(board);
+    expect(bestMove[0]).toBe(1);
+    expect(bestMove[1]).toBe(1);
+  });
+
+  it("takes a winning move", () => {
+    const board = [
+      [Move.x, Move.o, Move.x],
+      [null, Move.o, null],
+      [Move.o, null, Move.x],
+    ];
+    const bestMove = getNextMove(board);
+    expect(bestMove[0]).toBe(2);
+    expect(bestMove[1]).toBe(1);
   });
 });
