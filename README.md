@@ -13,5 +13,7 @@ Good luck!
 ----
 
 Created by Oliver Manheim
+
 Implemented in React & Typescript
+
 Sept 2020
